@@ -8,7 +8,12 @@ jobs:
       - checkout
       - run:
           name: Build
-          command: echo "Build step"
+          command: |
+            mkdir -p artifacts
+            echo "Build completed at $(date)" > artifacts/build-report.txt
+      - store_artifacts:
+          path: artifacts/build-report.txt
+          destination: build-report
 
   test:
     docker:
@@ -17,7 +22,14 @@ jobs:
       - checkout
       - run:
           name: Test
-          command: echo "Test step"
+          command: |
+            mkdir -p test-results
+            echo "All tests passed at $(date)" > test-results/test-report.txt
+      - store_artifacts:
+          path: test-results/test-report.txt
+          destination: test-report
+      - store_test_results:
+          path: test-results
 
   deploy:
     docker:
@@ -26,7 +38,12 @@ jobs:
       - checkout
       - run:
           name: Deploy
-          command: echo "Deploy step"
+          command: |
+            mkdir -p deploy-logs
+            echo "Deployed successfully at $(date)" > deploy-logs/deploy-report.txt
+      - store_artifacts:
+          path: deploy-logs/deploy-report.txt
+          destination: deploy-report
 
 workflows:
   build-and-test:
