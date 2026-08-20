@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  deploy: circleci/deploy@1.0
+
 jobs:
   build:
     docker:
@@ -27,6 +30,8 @@ jobs:
       - run:
           name: Deploy
           command: echo "Deploy step"
+      - deploy/record:
+          environment: production
 
 workflows:
   build-and-test:
