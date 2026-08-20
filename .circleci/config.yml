@@ -19,6 +19,15 @@ jobs:
           name: Test
           command: echo "Test step"
 
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: echo "Deploy step"
+
 workflows:
   build-and-test:
     jobs:
@@ -29,6 +38,12 @@ workflows:
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - test
           filters:
             branches:
               only: main
